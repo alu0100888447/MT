@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/M_T.dir/src/main.cpp.o CMakeFiles/M_T.dir/src/MT.cpp.o CMakeFiles/M_T.dir/src/Cinta.cpp.o CMakeFiles/M_T.dir/src/Estado.cpp.o CMakeFiles/M_T.dir/src/Transicion.cpp.o  -o M_T 

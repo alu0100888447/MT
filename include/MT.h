@@ -1,0 +1,48 @@
+//
+// Created by izm20 on 27/10/17.
+//
+
+#ifndef M_T_MT_H
+#define M_T_MT_H
+
+#include "Estado.h"
+#include "Cinta.h"
+
+class MT {
+private:
+    vector <Estado> estados_;
+    vector <string> alfabetoCinta_;
+    vector <string> alfabetoEntrada_;
+    string estadoInicial_;
+    string blanco_;
+    vector <string> conjuntoFinal_;
+public:
+    MT();
+    MT(vector<Estado> estados, vector<string> alfabetoCinta, vector<string> alfabetoEntrada, string estadoInicial,
+       string blanco, vector<string> conjuntoFinal);
+    MT(const MT &cp);
+    virtual ~MT();
+
+    void leerFichero(string nombreFichero);
+
+    const vector<Estado> &getEstados_() const;
+    void setEstados_(const vector<Estado> &estados_);
+    const vector<string> &getAlfabetoCinta_() const;
+    void setAlfabetoCinta_(const vector<string> &alfabetoCinta_);
+    const vector<string> &getAlfabetoEntrada_() const;
+    void setAlfabetoEntrada_(const vector<string> &alfabetoEntrada_);
+    const string &getEstadoInicial_() const;
+    void setEstadoInicial_(const string &estadoInicial_);
+    const string &getBlanco_() const;
+    void setBlanco_(const string &blanco_);
+    const vector<string> &getConjuntoFinal_() const;
+    void setConjuntoFinal_(const vector<string> &conjuntoFinal_);
+
+    MT& operator=(const MT &cp);
+    bool operator==(const MT &cp);
+
+    friend ostream& operator<<(ostream &out, const MT &cp);
+};
+
+
+#endif //M_T_MT_H
