@@ -5,13 +5,13 @@
 #include "../include/Cinta.h"
 
 Cinta::Cinta() {
-    cinta_ = "$";
+    cinta_ = ".";
     cabezal_ = 0;
 }
 
 Cinta::Cinta(string cinta, int cabezal) {
-    cinta_ = "$";
-    cinta_ += cinta + "$";
+    cinta_ = ".";
+    cinta_ += cinta + ".";
     cabezal_ = cabezal;
 }
 
@@ -23,6 +23,33 @@ Cinta::Cinta(const Cinta &cp) {
 Cinta::~Cinta() {
     cinta_.clear();
     cabezal_ = -1;
+}
+
+string Cinta::leer() {
+    stringstream aux;
+    string caracter;
+    aux << cinta_[cabezal_];
+    aux >> caracter;
+    return caracter;
+}
+
+void Cinta::escribir(string caracter) {
+    char aux = caracter[0];
+    cinta_[cabezal_] = aux;
+}
+
+void Cinta::derecha() {
+    ++cabezal_;
+    if (cabezal_ == cinta_.size())
+        cinta_.push_back('.');
+}
+
+void Cinta::izquierda() {
+    --cabezal_;
+    if (cabezal_ == -1) {
+        cabezal_ = 0;
+        cinta_.insert(cinta_.begin(), '.');
+    }
 }
 
 const string &Cinta::getCinta_() const {

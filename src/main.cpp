@@ -1,16 +1,38 @@
 #include "../include/MT.h"
 
-int main() {
-    Transicion Aux("q1", "a", "a", "R");
-    vector <Transicion> aux;
-    aux.push_back(Aux);
-    Estado AuxEstado ("q0", aux);
-    vector<Estado> auxV;
-    auxV.push_back(AuxEstado);
-    vector<string> cade = {"a" , "b"};
-    vector<string> entra = {"a", "b", "$"};
-    vector<string> fin = {"q1"};
-    MT AuxMT(auxV, cade, entra, "q0", "$", fin);
-    cout << AuxMT;
+int main(int argc, char const *argv[]) {
+    string cadena;
+    MT Maquina;
+    if(argc == 2)
+        Maquina.leerFichero(argv[1]);
+    else {
+        cout << "* Introduzca el nombre del fichero con la MT: ";
+        cin >> cadena;
+        Maquina.leerFichero(cadena);
+    }
+    //cout << Maquina;
+    int a = 0;
+    do {
+        cadena.clear();
+        cout << "0.- Salir" << endl;
+        cout << "1.- Analizar Cadena" << endl;
+        cout << "-> ";
+        cin >> a;
+        if(a == 1) {
+            cout << "* Introduzca la cadena a analizar: ";
+            cin >> cadena;
+            cout << endl;
+            if(Maquina.preAnalisis(cadena)) {
+                if (Maquina.analisis()) {
+                    cout << "\n\t\t\033[1;32m| La cadena introducida es aceptada por la MT. |\033[0m\n" << endl;
+                }
+                else {
+                    cout << "\n\t\t\033[1;31m| La cadena introducida no es aceptada por la MT. |\033[0m\n" << endl;
+                }
+            }
+            else
+                cout << "\n\t\t\033[1;31m[!La cadena introducida contiene caracteres no reconocibles por la MT.]\033[0m\n" << endl;
+        }
+    } while (a != 0);
     return 0;
 }

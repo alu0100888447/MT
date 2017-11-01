@@ -16,6 +16,7 @@ public:
     Estado(string nombreEstado, vector <Transicion> transiciones);
     Estado(const Estado &cp);
     virtual ~Estado();
+    Transicion buscarTransicion(string caracter);
 
     const string &getNombreEstado_() const;
     void setNombreEstado_(const string &nombreEstado_);

@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <string>
 #include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -21,6 +22,10 @@ public:
     Cinta(string cinta, int cabezal);
     Cinta(const Cinta &cp);
     virtual ~Cinta();
+    string leer();
+    void escribir(string caracter);
+    void derecha();
+    void izquierda();
 
     const string &getCinta_() const;
     void setCinta_(const string &cinta_);

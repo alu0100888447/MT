@@ -23,6 +23,15 @@ Estado::~Estado() {
     transiciones_.clear();
 }
 
+Transicion Estado::buscarTransicion(string caracter) {
+    for (int i = 0; i < transiciones_.size(); ++i) {
+        if (transiciones_[i].getCaracterLeido_() == caracter)
+            return transiciones_[i];
+    }
+    Transicion Aux;
+    return Aux;
+}
+
 const string &Estado::getNombreEstado_() const {
     return nombreEstado_;
 }
@@ -57,7 +66,7 @@ bool Estado::operator==(const Estado &cp) {
 }
 
 ostream &operator<<(ostream &out, const Estado &cp) {
-    out << "\t-- Estado actual: " << cp.getNombreEstado_() << endl;
+    out << "\t-- Estado: " << cp.getNombreEstado_() << endl << endl;
     for (int i = 0; i < cp.getTransiciones_().size(); ++i) {
         out << cp.getTransiciones_()[i];
     }
