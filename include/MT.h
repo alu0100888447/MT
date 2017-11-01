@@ -11,8 +11,8 @@
 class MT {
 private:
     vector <Estado> estados_;
-    vector <string> alfabetoCinta_;
     vector <string> alfabetoEntrada_;
+    vector <string> alfabetoCinta_;
     string estadoInicial_;
     string blanco_;
     vector <string> conjuntoFinal_;
@@ -32,10 +32,10 @@ public:
 
     const vector<Estado> &getEstados_() const;
     void setEstados_(const vector<Estado> &estados_);
-    const vector<string> &getAlfabetoCinta_() const;
-    void setAlfabetoCinta_(const vector<string> &alfabetoCinta_);
     const vector<string> &getAlfabetoEntrada_() const;
     void setAlfabetoEntrada_(const vector<string> &alfabetoEntrada_);
+    const vector<string> &getAlfabetoCinta_() const;
+    void setAlfabetoCinta_(const vector<string> &alfabetoCinta_);
     const string &getEstadoInicial_() const;
     void setEstadoInicial_(const string &estadoInicial_);
     const string &getBlanco_() const;

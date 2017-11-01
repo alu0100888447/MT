@@ -9,11 +9,11 @@ MT::MT() {
     blanco_ = ".";
 }
 
-MT::MT(vector<Estado> estados, vector<string> alfabetoCinta, vector<string> alfabetoEntrada, string estadoInicial,
+MT::MT(vector<Estado> estados, vector<string> alfabetoEntrada, vector<string> alfabetoCinta, string estadoInicial,
        string blanco, vector<string> conjuntoFinal, Cinta Cadena) {
     estados_ = estados;
-    alfabetoCinta_ = alfabetoCinta;
     alfabetoEntrada_ = alfabetoEntrada;
+    alfabetoCinta_ = alfabetoCinta;
     estadoInicial_ = estadoInicial;
     blanco_ = blanco;
     conjuntoFinal_ = conjuntoFinal;
@@ -22,8 +22,8 @@ MT::MT(vector<Estado> estados, vector<string> alfabetoCinta, vector<string> alfa
 
 MT::MT(const MT &cp) {
     estados_ = cp.getEstados_();
-    alfabetoCinta_ = cp.getAlfabetoCinta_();
     alfabetoEntrada_ = cp.getAlfabetoEntrada_();
+    alfabetoCinta_ = cp.getAlfabetoCinta_();
     estadoInicial_ = cp.getEstadoInicial_();
     blanco_ = cp.getBlanco_();
     conjuntoFinal_ = cp.getConjuntoFinal_();
@@ -32,8 +32,8 @@ MT::MT(const MT &cp) {
 
 MT::~MT() {
     estados_.clear();
-    alfabetoCinta_.clear();
     alfabetoEntrada_.clear();
+    alfabetoCinta_.clear();
     estadoInicial_.clear();
     blanco_.clear();
     conjuntoFinal_.clear();
@@ -60,13 +60,12 @@ void MT::leerFichero(string nombreFichero) {
             if (i == 0 || i > 5)
                 cadenasAux.push_back(cadenas[i]);
         }
-        guardarEstados(cadenasAux);
-        alfabetoCinta_ = cadenas[1];
-        alfabetoEntrada_ = cadenas[2];
+        alfabetoEntrada_ = cadenas[1];
+        alfabetoCinta_ = cadenas[2];
         estadoInicial_ = cadenas[3][0];
         blanco_ = cadenas[4][0];
         conjuntoFinal_ = cadenas[5];
-
+        guardarEstados(cadenasAux);
         fichero.close();
     }
     else {
@@ -77,8 +76,8 @@ void MT::leerFichero(string nombreFichero) {
 bool MT::preAnalisis(string cadena) {
     int contador = 0;
     for (int i = 0; i < cadena.size(); ++i) {
-        for (int j = 0; j < alfabetoCinta_.size(); ++j) {
-            if (cadena[i] == alfabetoCinta_[j][0])
+        for (int j = 0; j < alfabetoEntrada_.size(); ++j) {
+            if (cadena[i] == alfabetoEntrada_[j][0])
                 ++contador;
         }
     }
@@ -100,6 +99,8 @@ bool MT::analisis() {
     do {
         Transicion TransElegida = EstadoAc.buscarTransicion(Cadena_.leer());
         if (TransElegida.getEstadoSiguiente_() != "") {
+            cout << " * Estado de la cinta: " << "\n\n\t\t\033[1;34m" << Cadena_ << "\033[0m\n";
+            cout << " * Transicion elegida de: " << EstadoAc.getNombreEstado_() << "\n\n\t\t\033[1;35m" << TransElegida << "\033[0m\n" << endl;
             Cadena_.escribir(TransElegida.getCaracterEscrito_());
             if (TransElegida.getMovimiento_() == "R")
                 Cadena_.derecha();
@@ -111,7 +112,9 @@ bool MT::analisis() {
             }
         }
         else {
+            cout << " * Estados de aceptacion: ";
             for (int i = 0; i < conjuntoFinal_.size(); ++i) {
+                cout << conjuntoFinal_[i] << " ";
                 if (EstadoAc.getNombreEstado_() == conjuntoFinal_[i])
                     return true;
             }
@@ -125,8 +128,36 @@ void MT::guardarEstados(vector<vector<string>> estados) {
         vector <Transicion> AuxV;
         for (int j = 1; j < estados.size(); ++j) {
             if (estados[0][i] == estados[j][0]) {
-                Transicion AuxT(estados[j][2], estados[j][1], estados[j][3], estados[j][4]);
-                AuxV.push_back(AuxT);
+                if (estados[j][4] == "R" || estados[j][4] == "L") {
+                    bool aux = false;
+                    for (int k = 0; k < alfabetoEntrada_.size(); ++k) {
+                        if (estados[j][1] == alfabetoEntrada_[k] || estados[j][1] == ".")
+                            aux = true;
+                    }
+                    if (aux == true) {
+                        aux = false;
+                        for (int k = 0; k < alfabetoCinta_.size(); ++k) {
+                            if (estados[j][3] == alfabetoCinta_[k])
+                                aux = true;
+                        }
+                        if (aux == true) {
+                            Transicion AuxT(estados[j][2], estados[j][1], estados[j][3], estados[j][4]);
+                            AuxV.push_back(AuxT);
+                        }
+                        else {
+                            cout << endl << "~ La MT contiene algun fallo" << endl;
+                            exit(0);
+                        }
+                    }
+                    else {
+                        cout << endl << "~ La MT contiene algun fallo" << endl;
+                        exit(0);
+                    }
+                }
+                else {
+                    cout << endl << "~ La MT contiene algun fallo" << endl;
+                    exit(0);
+                }
             }
         }
         Estado AuxE(estados[0][i], AuxV);
@@ -162,20 +193,20 @@ void MT::setEstados_(const vector<Estado> &estados_) {
     MT::estados_ = estados_;
 }
 
-const vector<string> &MT::getAlfabetoCinta_() const {
-    return alfabetoCinta_;
-}
-
-void MT::setAlfabetoCinta_(const vector<string> &alfabetoCinta_) {
-    MT::alfabetoCinta_ = alfabetoCinta_;
-}
-
 const vector<string> &MT::getAlfabetoEntrada_() const {
     return alfabetoEntrada_;
 }
 
 void MT::setAlfabetoEntrada_(const vector<string> &alfabetoEntrada_) {
     MT::alfabetoEntrada_ = alfabetoEntrada_;
+}
+
+const vector<string> &MT::getAlfabetoCinta_() const {
+    return alfabetoCinta_;
+}
+
+void MT::setAlfabetoCinta_(const vector<string> &alfabetoCinta_) {
+    MT::alfabetoCinta_ = alfabetoCinta_;
 }
 
 const string &MT::getEstadoInicial_() const {
@@ -212,8 +243,8 @@ void MT::setCadena_(const Cinta &Cadena_) {
 
 MT &MT::operator=(const MT &cp) {
     estados_ = cp.getEstados_();
-    alfabetoCinta_ = cp.getAlfabetoCinta_();
     alfabetoEntrada_ = cp.getAlfabetoEntrada_();
+    alfabetoCinta_ = cp.getAlfabetoCinta_();
     estadoInicial_ = cp.getEstadoInicial_();
     blanco_ = cp.getBlanco_();
     conjuntoFinal_ = cp.getConjuntoFinal_();
@@ -230,13 +261,13 @@ ostream &operator<<(ostream &out, const MT &cp) {
     for (int i = 0; i < cp.getEstados_().size(); ++i) {
         out << cp.getEstados_()[i] << endl;
     }
-    out << "Alfabeto Cinta: ";
-    for (int j = 0; j < cp.getAlfabetoCinta_().size(); ++j) {
-        out << cp.getAlfabetoCinta_()[j] << " | ";
+    out << "Alfabeto Entrada: ";
+    for (int j = 0; j < cp.getAlfabetoEntrada_().size(); ++j) {
+        out << cp.getAlfabetoEntrada_()[j] << " | ";
     }
-    out << endl << "Alfabeto Entrada: ";
-    for (int k = 0; k < cp.getAlfabetoEntrada_().size(); ++k) {
-        out << cp.getAlfabetoEntrada_()[k] << " | ";
+    out << endl << "Alfabeto Cinta: ";
+    for (int k = 0; k < cp.getAlfabetoCinta_().size(); ++k) {
+        out << cp.getAlfabetoCinta_()[k] << " | ";
     }
     out << endl << "Estado Inicial: " << cp.getEstadoInicial_() << endl;
     out << "Blanco: " << cp.getBlanco_() << endl << "Estados de Aceptacion: " ;

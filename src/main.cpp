@@ -10,7 +10,7 @@ int main(int argc, char const *argv[]) {
         cin >> cadena;
         Maquina.leerFichero(cadena);
     }
-    //cout << Maquina;
+    cout << Maquina << endl << endl;
     int a = 0;
     do {
         cadena.clear();
@@ -24,10 +24,10 @@ int main(int argc, char const *argv[]) {
             cout << endl;
             if(Maquina.preAnalisis(cadena)) {
                 if (Maquina.analisis()) {
-                    cout << "\n\t\t\033[1;32m| La cadena introducida es aceptada por la MT. |\033[0m\n" << endl;
+                    cout << "\n\n\t\t\033[1;32m| La cadena introducida es aceptada por la MT. |\033[0m\n" << endl;
                 }
                 else {
-                    cout << "\n\t\t\033[1;31m| La cadena introducida no es aceptada por la MT. |\033[0m\n" << endl;
+                    cout << "\n\n\t\t\033[1;31m| La cadena introducida no es aceptada por la MT. |\033[0m\n" << endl;
                 }
             }
             else
