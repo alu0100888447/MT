@@ -1,0 +1,19 @@
+# Ejemplo de una MT
+q0 q1 q2 q3 q4
+0 1
+0 1 x .
+q0
+.
+q4
+q0 1 q0 1 R
+q0 0 q1 x R
+q0 . q4 . R
+q1 1 q1 1 R
+q1 0 q1 0 R
+q1 . q2 . R
+q2 . q3 0 R
+q2 0 q2 0 R
+q3 . q3 . L
+q3 0 q3 0 L
+q3 1 q3 1 L
+q3 x q0 0 R

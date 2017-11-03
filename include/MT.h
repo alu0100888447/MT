@@ -24,10 +24,10 @@ public:
     MT(const MT &cp);
     virtual ~MT();
 
-    void leerFichero(string nombreFichero);
+    bool leerFichero(string nombreFichero);
     bool preAnalisis(string cadena);
     bool analisis();
-    void guardarEstados(vector <vector <string>> estados);
+    bool guardarEstados(vector <vector <string>> estados);
     vector <string> separarCadenas(string cadena);
 
     const vector<Estado> &getEstados_() const;

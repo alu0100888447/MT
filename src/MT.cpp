@@ -39,7 +39,7 @@ MT::~MT() {
     conjuntoFinal_.clear();
 }
 
-void MT::leerFichero(string nombreFichero) {
+bool MT::leerFichero(string nombreFichero) {
     string cadena = "";
     vector <vector <string>> cadenas;
     vector <vector <string>> cadenasAux;
@@ -56,20 +56,27 @@ void MT::leerFichero(string nombreFichero) {
                 cadenas.push_back(separarCadenas(cadena));
             }
         }
+        fichero.close();
         for (int i = 0; i < cadenas.size(); ++i) {
             if (i == 0 || i > 5)
                 cadenasAux.push_back(cadenas[i]);
         }
-        alfabetoEntrada_ = cadenas[1];
-        alfabetoCinta_ = cadenas[2];
-        estadoInicial_ = cadenas[3][0];
-        blanco_ = cadenas[4][0];
-        conjuntoFinal_ = cadenas[5];
-        guardarEstados(cadenasAux);
-        fichero.close();
+        if (cadenas.size() > 6) {
+            alfabetoEntrada_ = cadenas[1];
+            alfabetoCinta_ = cadenas[2];
+            estadoInicial_ = cadenas[3][0];
+            blanco_ = cadenas[4][0];
+            conjuntoFinal_ = cadenas[5];
+            return guardarEstados(cadenasAux);
+        }
+        else {
+            cout << endl << "~ La MT contiene algun fallo" << endl;
+            return false;
+        }
     }
     else {
         cout << endl << "~ El fichero no se pudo abrir o no existe." << endl;
+        return false;
     }
 }
 
@@ -123,46 +130,50 @@ bool MT::analisis() {
     } while (true);
 }
 
-void MT::guardarEstados(vector<vector<string>> estados) {
+bool MT::guardarEstados(vector<vector<string>> estados) {
     for (int i = 0; i < estados[0].size(); ++i) {
         vector <Transicion> AuxV;
         for (int j = 1; j < estados.size(); ++j) {
-            if (estados[0][i] == estados[j][0]) {
-                if (estados[j][4] == "R" || estados[j][4] == "L") {
-                    bool aux = false;
-                    for (int k = 0; k < alfabetoEntrada_.size(); ++k) {
-                        if (estados[j][1] == alfabetoEntrada_[k] || estados[j][1] == ".")
-                            aux = true;
-                    }
-                    if (aux == true) {
-                        aux = false;
+            if (estados[j].size() == 5) {
+                if (estados[0][i] == estados[j][0]) {
+                    if (estados[j][4] == "R" || estados[j][4] == "L") {
+                        bool aux = false;
                         for (int k = 0; k < alfabetoCinta_.size(); ++k) {
-                            if (estados[j][3] == alfabetoCinta_[k])
+                            if (estados[j][1] == alfabetoCinta_[k] || estados[j][1] == ".")
                                 aux = true;
                         }
                         if (aux == true) {
-                            Transicion AuxT(estados[j][2], estados[j][1], estados[j][3], estados[j][4]);
-                            AuxV.push_back(AuxT);
+                            aux = false;
+                            for (int k = 0; k < alfabetoCinta_.size(); ++k) {
+                                if (estados[j][3] == alfabetoCinta_[k])
+                                    aux = true;
+                            }
+                            if (aux == true) {
+                                Transicion AuxT(estados[j][2], estados[j][1], estados[j][3], estados[j][4]);
+                                AuxV.push_back(AuxT);
+                            } else {
+                                cout << endl << "~ La MT contiene algun fallo con la lectura" << endl;
+                                return false;
+                            }
+                        } else {
+                            cout << endl << "~ La MT contiene algun fallo con la escritura" << endl;
+                            return false;
                         }
-                        else {
-                            cout << endl << "~ La MT contiene algun fallo" << endl;
-                            exit(0);
-                        }
-                    }
-                    else {
-                        cout << endl << "~ La MT contiene algun fallo" << endl;
-                        exit(0);
+                    } else {
+                        cout << endl << "~ La MT contiene algun fallo con los movimientos" << endl;
+                        return false;
                     }
                 }
-                else {
-                    cout << endl << "~ La MT contiene algun fallo" << endl;
-                    exit(0);
-                }
+            }
+            else {
+                cout << endl << "~ La MT contiene algun fallo con las transiciones" << endl;
+                return false;
             }
         }
         Estado AuxE(estados[0][i], AuxV);
         estados_.push_back(AuxE);
     }
+    return true;
 }
 
 vector<string> MT::separarCadenas(string cadena) {
